@@ -19,6 +19,7 @@
         <!-- NAV  -->
         <div class="nav container">
             <a href="index.html" class="logo"><span>S</span>hop-Now</a>
+            <a href="post.html" class="logo" id="Add-Product">Add-Product</a>
             <!-- CART ICON  -->
             <i class='bx bx-shopping-bag' id="cart-icon"></i>
             
@@ -128,6 +129,35 @@
 
     <!-- link js  -->
     <script src="assets/js/main.js"></script>
+    <script src="index.js"></script>
+    <script src="redis-client.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() {
+     
+        var form = document.getElementById('uploadForm');
+        var titleInput = document.getElementById('title');
+        var brandInput = document.getElementById('brand');
+        var urlInput = document.getElementById('url');
+        var fileInput = document.getElementById('uploadImage');
+    
+    
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+    
+            // Get the values of form inputs
+            var title = titleInput.value;
+            var brand = brandInput.value;
+            var url = urlInput.value;
+            var file = fileInput.files[0];
+    
+            // Use the form values as needed, for example, log them to console
+            console.log('Title:', title);
+            console.log('Brand:', brand);
+            console.log('URL:', url);
+            console.log('File:', file); // This will log the File object
+        });
+    });
+    
+    </script>
 </body>
 
 </html>

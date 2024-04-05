@@ -122,6 +122,8 @@ function handle_buyOrder() {
   update();
 }
 
+
+
 // =========== UPDATE & RERENDER FUNCTIONS =========
 function updateTotal() {
   let cartBoxes = document.querySelectorAll(".cart-box");
