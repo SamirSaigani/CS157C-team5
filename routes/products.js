@@ -1,14 +1,11 @@
-/**
- * Define API endpoints specifically for product-related operations
- */
+// =============== Purpose ====================
+// Define API endpoints specifically for product-related operations
 
 const express = require('express');
 const router = express.Router();
 const redisClient = require('../redis-client');
 
-/**
- * ASYNC FUNCTIONS
- */
+// =============== ASYNC FUNCTIONS ====================
 
 async function getProductURL(req, res) {
     try {
@@ -33,20 +30,15 @@ async function getProductURL(req, res) {
     }
 }
 
-/**
- * ROUTER CALLS
- * 
- * Handles all HTTP requests that starts with /api/products
- */
+// =============== ROUTER CALLS ====================
+// Handles all HTTP requests that starts with /api/products
 
 /**
  * Example of HTTP request: http://localhost:3000/api/products/123/456
- * The Express server (index.js) listens for the /api/products, redirects it to products.js (here), 
- * matches /:userId/:productId to call the getProductURL function
+ * The Express server (index.js) listens for HTTP requests starting with /api/products, redirects it to products.js (here), 
+ * matches the rest of the HTTP request, /:userId/:productId, to call the getProductURL function
  */
 router.get('/:userId/:productId', getProductURL);
 
-/**
- * EXPORT RESPONSES
- */
+// =============== EXPORT RESPONSES ====================
 module.exports = router;

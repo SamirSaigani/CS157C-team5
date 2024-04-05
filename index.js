@@ -1,9 +1,8 @@
-/**
- * Package.json explains how the Node.js server is set up
- * The entry point of the Node.js server is the index.js (Here)
- * 
- * Acts as the central point for handling HTTP requests and responses (How the frontend interacts with the backend)
- */
+// =============== Purpose ====================
+// Entry point for the Express Server, defined in Package.json
+// Acts as the central point for handling HTTP requests and responses
+// How the frontend and backend interacts
+
 const express = require('express');
 const app = express();
 
