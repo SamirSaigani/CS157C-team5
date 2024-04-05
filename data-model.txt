@@ -1,0 +1,4 @@
+Data model for Redis DB
+
+Mapping different users to their products:
+    project:users_id:<user_id>:product:<product_id> —> (hash datatype) [title: “String1”, brand: “String2”, URL: “String3”]
