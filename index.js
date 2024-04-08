@@ -3,7 +3,9 @@
 // Acts as the central point for handling HTTP requests and responses
 // How the frontend and backend interacts
 
-const express = require('express');
+import express from "express";
+
+
 const app = express();
 
 //When the Express server recieves an HTTP request starting with /api/products
