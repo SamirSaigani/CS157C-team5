@@ -3,7 +3,7 @@
 
 const express = require('express');
 const router = express.Router();
-const redisClient = require('../redis-client');
+const redisClient = require('./redis-client.cjs');
 
 // =============== ASYNC FUNCTIONS ====================
 

@@ -1,27 +1,28 @@
-// =============== Purpose ====================
-// Entry point for the Express Server, defined in Package.json
-// Acts as the central point for handling HTTP requests and responses
-// How the frontend and backend interacts
-
-import express from "express";
-
+import express from 'express';
+import path from 'path';
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Define the directory where your HTML files are located
+const htmlDirectory = path.dirname(new URL(import.meta.url).pathname);
 
 // Route handler for the root URL
 app.get('/', (req, res) => {
-  res.send('API Server');
+  res.sendFile('index.hml', { root: htmlDirectory });
 });
 
 // Body parser middleware, allow JSON body in HTTP requests
 app.use(express.json());
 
-//When the Express server recieves an HTTP request starting with /api/products
-//Go to routes/product.js to handle that request
-const productRoutes = require('./routes/products');
+// Define your product routes
+const productRoutes = express.Router();
+
+// When the Express server receives an HTTP request starting with /api/products
+// Go to routes/product.js to handle that request
 app.use('/api/products', productRoutes);
 
-const PORT = 3000;
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
