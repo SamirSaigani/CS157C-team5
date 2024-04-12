@@ -5,10 +5,13 @@ function HomePage() {
 
     useEffect(() => {
         // Fetch the products when the component mounts
-        fetch('/api/products')
-            .then(response => response.json())
-            .then(data => setProducts(data))
-            .catch(error => console.error('Error fetching products:', error));
+        fetch('http://localhost:5000/api/products', {
+            method:'GET',
+            mode: 'no-cors'
+        }).then(response => response.json())
+        .then(data => setProducts(data))
+        .catch(error => console.error('Error fetching products:', error));
+
     }, []);
 
     return (

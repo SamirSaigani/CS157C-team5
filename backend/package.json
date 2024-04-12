@@ -1,9 +1,9 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
-    "redis": "^4.6.13",
-    "contextIsloation": false
+    "redis": "^4.6.13"
   },
   "name": "cs157c-team5",
   "description": "",
