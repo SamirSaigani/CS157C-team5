@@ -6,35 +6,15 @@
 
 const express = require('express');
 const cors = require('cors');
+const productRoutes = require('./routes/products');
+const routes = require('./routes/routes');
 const app = express();
 
-// CORS options, you can define more specific options here
-const corsOptions = {
-  origin: '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  preflightContinue : false,
-  optionsSuccessStatus: 204,
-};
-
-app.options('*',cors())
-
-// Use CORS middleware with options
-app.use(cors(corsOptions));
-
-// Body parser middleware, allow JSON body in HTTP requests
+app.use(cors());
 app.use(express.json());
+app.use(productRoutes);
+app.use(routes);
 
-// Route handler for the root URL
-app.get('/', (req, res) => {
-  res.send('API Server');
-});
-
-//When the Express server recieves an HTTP request starting with /api/products
-//Go to routes/product.js to handle that request
-const productRoutes = require('./routes/products');
-app.use('/api/products', productRoutes);
-
-const PORT = 5001;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const server = app.listen(8080, () => {
+  console.log(`Server running on port ${server.address().port}`);
 });
