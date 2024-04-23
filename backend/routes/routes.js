@@ -3,12 +3,11 @@ const router = express.Router();
 const redisClient = require('../redis-client');
 const bcrypt = require('bcrypt');
 
-// Use router.post instead of app.post
+// Signup endpoint
 router.post('/signup', async (req, res) => {
     const { email, password, name } = req.body;
     try {
-        // In real applications, ensure that the password is hashed before storing
-        const hashedPassword = await bcrypt.hash(password, 10); // '10' is the salt rounds
+        const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
         await redisClient.hSet(`user:${email}`, {
             password: hashedPassword,
             name: name,
@@ -41,6 +40,38 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         console.error('Error logging in user', error);
         res.status(500).json({ message: 'Error logging in user' });
+    }
+});
+
+// Add a new product and link it to a user
+router.post('/api/products', async (req, res) => {
+    const { userId, name, brand, url, image_url } = req.body;
+    try {
+        const productId = Date.now();  // Simple unique ID generation
+        const productKey = `user:${userId}:product:${productId}`;
+        await redisClient.hSet(productKey, {
+            name, brand, url, image_url
+        });
+        await redisClient.rPush(`user:${userId}:products`, productKey);
+
+        res.status(201).json({ message: 'Product added successfully', productId });
+    } catch (error) {
+        console.error('Failed to add product:', error);
+        res.status(500).json({ error: 'Failed to add product' });
+    }
+});
+
+// Get all products for a user
+router.get('/api/products/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const productKeys = await redisClient.lRange(`user:${userId}:products`, 0, -1);
+        const products = await Promise.all(productKeys.map(key => redisClient.hGetAll(key)));
+
+        res.status(200).json(products);
+    } catch (error) {
+        console.error('Failed to retrieve products:', error);
+        res.status(500).json({ error: 'Failed to retrieve products' });
     }
 });
 
