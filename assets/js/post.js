@@ -21,7 +21,7 @@ function displayImage(event) {
   
     // Redirct to Home Page
     document.getElementById('submitButton').addEventListener('click', function() {
-    window.location.href = 'index.html';
+    window.location.href = '/';
   });
   }
 
