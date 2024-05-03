@@ -50,7 +50,7 @@ router.post('/api/products', async (req, res) => {
         const productId = Date.now();  // Simple unique ID generation
         const productKey = `user:${userId}:product:${productId}`;
         await redisClient.hSet(productKey, {
-            name, brand, url, image_url
+            name, brand, url, image_url, id: productId
         });
         await redisClient.rPush(`user:${userId}:products`, productKey);
 

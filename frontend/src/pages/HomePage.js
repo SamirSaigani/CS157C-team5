@@ -10,7 +10,8 @@ const HomePage = () => {
         name: '',
         brand: '',
         url: '',
-        image_url: ''
+        image_url: '',
+        id: ''
     });
     const userId = "DN@gmail.com"; // This should come from user session or state
 
@@ -119,13 +120,13 @@ const HomePage = () => {
                                 <Card.Body>
                                     <Card.Title>{product.name}</Card.Title>
                                     <Card.Text>{product.brand}</Card.Text>
-                                </Card.Body>
-                                <button className="ellipsis-button" onClick={(e) => {
+                                    <button className="ellipsis-button" onClick={(e) => {
                                     e.preventDefault();
                                     handleEdit(product, e);
-                                }}>
-                                &#x2026;  {/* HTML entity for ellipsis */}
-                                </button>
+                                    }}>
+                                    &#x2026;  {/* HTML entity for ellipsis */}
+                                    </button>
+                                </Card.Body>
                             </Card>
                         </a>
                     ))}
