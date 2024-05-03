@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Card } from 'react-bootstrap';
+import '../styles/HomePage.css';
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
@@ -91,16 +92,19 @@ const HomePage = () => {
             </Form>
             <div>
                 <h2>Product List</h2>
-                {products.map((product, index) => (
-                    <Card key={index} style={{ marginBottom: '10px' }}>
-                        <Card.Body>
-                            <Card.Title>{product.name}</Card.Title>
-                            <Card.Text>Brand: {product.brand}</Card.Text>
-                            <Card.Text><a href={product.url} target="_blank" rel="noopener noreferrer">Visit product</a></Card.Text>
-                            <Card.Img src={product.image_url} alt="product" />
-                        </Card.Body>
-                    </Card>
-                ))}
+                <div className="product-grid">
+                    {products.map((product, index) => (
+                        <a href={product.url} target="_blank" rel="noopener noreferrer" key={index} className="card-link">
+                            <Card className="card-custom">
+                                <Card.Img src={product.image_url} alt={product.name} className="card-img-top" />
+                                <Card.Body>
+                                    <Card.Title>{product.name}</Card.Title>
+                                    <Card.Text>{product.brand}</Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </a>
+                    ))}
+                </div>
             </div>
         </Container>
     );

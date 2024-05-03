@@ -12,7 +12,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(productRoutes);
+//app.use(productRoutes);
 app.use(routes);
 
 const server = app.listen(8080, () => {

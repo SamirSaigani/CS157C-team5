@@ -1,0 +1,54 @@
+/* Styles for the grid layout of cards */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjusts the grid to fill available width */
+    gap: 20px; /* Space between the cards */
+ }
+ 
+ 
+ /* Styles for images within cards */
+ .card-custom {
+    display: inline-block; /* Allows the card to shrink-wrap its content */
+    width: 100%; /* Takes full width based on the grid column width */
+    overflow: hidden; /* Keeps everything neat */
+    cursor: pointer;
+    position: relative; /* For absolute positioning of the card-body */
+ }
+ 
+ 
+ .card-img-top {
+    width: 100%; /* Ensure the image covers the width of the card */
+    height: auto; /* Height is auto to maintain aspect ratio */
+    object-fit: cover; /* Ensures the image covers the area, adjusting the height as needed */
+    transition: transform 0.3s ease;
+ }
+ 
+ 
+ .product-grid .card-custom .card-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.25); /* Semi-transparent overlay */
+    color: white;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Center align the content */
+    justify-content: flex-start; /* Vertically center */
+ }
+ 
+ 
+ .card-custom:hover .card-body {
+    visibility: visible;
+    opacity: 1;
+ }
+ 
+ 
+ .card-custom:hover .card-img-top {
+    transform: scale(1.04); /* Subtle zoom effect */
+ }
+ 
