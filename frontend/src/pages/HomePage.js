@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container, Card } from 'react-bootstrap';
+import { Form, Button, Container, Modal, Card } from 'react-bootstrap';
 import '../styles/HomePage.css';
 
 const HomePage = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState({});
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
         name: '',
@@ -42,6 +44,23 @@ const HomePage = () => {
             console.error('Error adding product:', error);
             alert('Failed to add product');
         });
+    };
+
+    /* Modal Handling when user clicks '...' on card */
+    const handleEdit = (product, event) => {
+        event.stopPropagation();
+        setCurrentProduct(product);
+        setShowModal(true);
+    };
+
+    const handleClose = () => {
+        setShowModal(false);
+    };
+
+    const handleSaveChanges = () => {
+        console.log('Save changes for', currentProduct.name);
+        // Here you would typically handle the API call to update the product
+        setShowModal(false);
     };
 
     return (
@@ -101,11 +120,54 @@ const HomePage = () => {
                                     <Card.Title>{product.name}</Card.Title>
                                     <Card.Text>{product.brand}</Card.Text>
                                 </Card.Body>
+                                <button className="ellipsis-button" onClick={(e) => {
+                                    e.preventDefault();
+                                    handleEdit(product, e);
+                                }}>
+                                &#x2026;  {/* HTML entity for ellipsis */}
+                                </button>
                             </Card>
                         </a>
                     ))}
                 </div>
             </div>
+
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Product</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="productName">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter product name"
+                                value={currentProduct.name}
+                                onChange={e => setCurrentProduct({ ...currentProduct, name: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="productBrand">
+                            <Form.Label>Brand</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter brand"
+                                value={currentProduct.brand}
+                                onChange={e => setCurrentProduct({ ...currentProduct, brand: e.target.value })}
+                            />
+                        </Form.Group>
+                        {/* Add other fields as necessary */}
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleSaveChanges}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     );
 };

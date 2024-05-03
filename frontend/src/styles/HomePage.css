@@ -13,6 +13,7 @@
     overflow: hidden; /* Keeps everything neat */
     cursor: pointer;
     position: relative; /* For absolute positioning of the card-body */
+    
  }
  
  
@@ -51,4 +52,16 @@
  .card-custom:hover .card-img-top {
     transform: scale(1.04); /* Subtle zoom effect */
  }
- 
+
+ /* Styles for ellipsis*/
+ .ellipsis-button {
+    position: absolute;
+    bottom: 10px;  
+    right: 10px;  
+    background-color: transparent;  
+    border: none;  
+    cursor: pointer;  
+    font-size: 24px;  
+    color: white; 
+    z-index: 10; 
+}
