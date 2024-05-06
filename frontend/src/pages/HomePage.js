@@ -14,14 +14,14 @@ const HomePage = () => {
         image_url: '',
         id: ''
     });
-    const userId = "DN@gmail.com"; // This should come from user session or state
+    const userId = sessionStorage.getItem('userEmail');; // This should come from user session or state
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/products/${userId}`)
             .then(res => res.json())
             .then(setProducts)
             .catch(console.error);
-    }, []);
+    }, [userId]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;

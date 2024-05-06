@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Card } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';  // Import useHistory for redirection
+import { useNavigate } from 'react-router-dom';  // Import useHistory for redirection
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -29,7 +30,8 @@ const Login = () => {
                 const data = await response.json();
                 console.log(data); // handle response
                 alert('Login successful!');
-                window.location.href = "/HomePage";
+                sessionStorage.setItem('userEmail', email); // **Store user email in session storage**
+                navigate("/HomePage");
             } else {
                 console.error('Failed to fetch:', response.statusText);
                 alert('Login failed!');
