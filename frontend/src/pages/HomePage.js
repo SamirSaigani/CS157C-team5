@@ -90,25 +90,31 @@ const HomePage = () => {
     };
     
     const handleDelete = () => {
-        console.log('Delete', currentProduct.id);
-    
+        const userId = "DN@gmail.com"; // This should come from user session or state
+      
         fetch(`http://localhost:8080/api/products/${currentProduct.id}?userId=${userId}`, {
-            method: 'DELETE'
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          params: {
+            userId
+          }
         })
         .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error('Something went wrong');
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Something went wrong');
         })
         .then(data => {
-            console.log('Product deleted successfully:', data);
-            setProducts(prevProducts => prevProducts.filter(p => p.id !== currentProduct.id));
-            setShowModal(false);
+          console.log('Product deleted successfully:', data);
+          setProducts(prevProducts => prevProducts.filter(p => p.id !== currentProduct.id));
+          setShowModal(false);
         })
         .catch(error => {
-            console.error('Error deleting product:', error);
-            alert('Failed to delete product');
+          console.error('Error deleting product:', error);
+          alert('Failed to delete product');
         });
     };
 
@@ -168,6 +174,7 @@ const HomePage = () => {
                                 <Card.Body>
                                     <Card.Title>{product.name}</Card.Title>
                                     <Card.Text>{product.brand}</Card.Text>
+                                    <Card.Text>{product.id}</Card.Text>
                                     <button className="ellipsis-button" onClick={(e) => {
                                     e.preventDefault();
                                     handleEdit(product, e);
