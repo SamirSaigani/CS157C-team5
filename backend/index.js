@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 //app.use(productRoutes);
-app.use(routes);
+app.use('/',routes);
 
 const server = app.listen(8080, () => {
   console.log(`Server running on port ${server.address().port}`);

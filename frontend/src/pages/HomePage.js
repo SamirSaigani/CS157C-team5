@@ -51,6 +51,7 @@ const HomePage = () => {
     const handleEdit = (product, event) => {
         event.stopPropagation();
         setCurrentProduct(product);
+        setFormData(product);
         setShowModal(true);
     };
 
@@ -59,9 +60,56 @@ const HomePage = () => {
     };
 
     const handleSaveChanges = () => {
-        console.log('Save changes for', currentProduct.name);
-        // Here you would typically handle the API call to update the product
-        setShowModal(false);
+        console.log('Save changes for', currentProduct);
+      
+        const { id, name, brand, url, image_url } = formData;
+        const userId = "DN@gmail.com"; // This should come from user session or state
+      
+        fetch(`http://localhost:8080/api/products/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId, name, brand, url, image_url })
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Something went wrong');
+        })
+        .then(data => {
+          console.log('Product updated successfully:', data);
+          setProducts(prevProducts => prevProducts.map(p => p.id === currentProduct.id ? { ...p, ...currentProduct } : p))
+          setShowModal(false);
+        })
+        .catch(error => {
+          console.error('Error updating product:', error.message);
+          alert('Failed to update product');
+        });
+    };
+    
+    const handleDelete = () => {
+        console.log('Delete', currentProduct.id);
+    
+        fetch(`http://localhost:8080/api/products/${currentProduct.id}?userId=${userId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Something went wrong');
+        })
+        .then(data => {
+            console.log('Product deleted successfully:', data);
+            setProducts(prevProducts => prevProducts.filter(p => p.id !== currentProduct.id));
+            setShowModal(false);
+        })
+        .catch(error => {
+            console.error('Error deleting product:', error);
+            alert('Failed to delete product');
+        });
     };
 
     return (
@@ -111,7 +159,7 @@ const HomePage = () => {
                 <Button type="submit">Add Product</Button>
             </Form>
             <div>
-                <h2>Product List</h2>
+                <h2>Your Products</h2>
                 <div className="product-grid">
                     {products.map((product, index) => (
                         <a href={product.url} target="_blank" rel="noopener noreferrer" key={index} className="card-link">
@@ -157,15 +205,30 @@ const HomePage = () => {
                                 onChange={e => setCurrentProduct({ ...currentProduct, brand: e.target.value })}
                             />
                         </Form.Group>
-                        {/* Add other fields as necessary */}
+                        <Form.Group controlId="productUrl">
+                            <Form.Label>URL</Form.Label>
+                            <Form.Control
+                                type="url"
+                                value={currentProduct.url}
+                                onChange={e => setCurrentProduct({ ...currentProduct, url: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="productImageUrl">
+                            <Form.Label>Image URL</Form.Label>
+                            <Form.Control
+                                type="url"
+                                value={currentProduct.image_url}
+                                onChange={e => setCurrentProduct({ ...currentProduct, image_url: e.target.value })}
+                            />
+                        </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
                     <Button variant="primary" onClick={handleSaveChanges}>
                         Save Changes
+                    </Button>
+                    <Button variant="danger" onClick={handleDelete} style={{ position: 'absolute', left: 15 }}>
+                        Delete
                     </Button>
                 </Modal.Footer>
             </Modal>
