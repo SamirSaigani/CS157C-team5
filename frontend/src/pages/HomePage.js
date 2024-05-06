@@ -28,7 +28,7 @@ const HomePage = () => {
             .then(setProducts)
             .catch(console.error);
         }
-    }, [userId]);
+    }, [userId, navigate]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -81,7 +81,7 @@ const HomePage = () => {
         console.log('Save changes for', currentProduct);
       
         const { id, name, brand, url, image_url } = formData;
-        const userId = "DN@gmail.com"; // This should come from user session or state
+        //const userId = "DN@gmail.com"; // This should come from user session or state
       
         fetch(`http://localhost:8080/api/products/${id}`, {
           method: 'PUT',
@@ -108,7 +108,7 @@ const HomePage = () => {
     };
     
     const handleDelete = () => {
-        const userId = "DN@gmail.com"; // This should come from user session or state
+        //const userId = "DN@gmail.com"; // This should come from user session or state
       
         fetch(`http://localhost:8080/api/products/${currentProduct.id}?userId=${userId}`, {
           method: 'DELETE',
