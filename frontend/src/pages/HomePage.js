@@ -4,6 +4,7 @@ import '../styles/HomePage.css';
 
 const HomePage = () => {
     const [showModal, setShowModal] = useState(false);
+    const [addProductModal, setAddProductModal] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({});
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
@@ -39,12 +40,22 @@ const HomePage = () => {
             console.log(data);
             setProducts([...products, formData]);
             setFormData({ name: '', brand: '', url: '', image_url: '' });
-            alert('Product added successfully!');
+            //alert('Product added successfully!');
+            handleCloseAddProductModal();
         })
         .catch(error => {
             console.error('Error adding product:', error);
             alert('Failed to add product');
         });
+    };
+
+    /* Modal Handling for adding products */
+    const handleAddProduct = () => {
+        setAddProductModal(true);
+    };
+    
+    const handleCloseAddProductModal = () => {
+        setAddProductModal(false);
     };
 
     /* Modal Handling when user clicks '...' on card */
@@ -120,50 +131,8 @@ const HomePage = () => {
 
     return (
         <Container>
-            <h1>Products</h1>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group>
-                    <Form.Label>Product Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Brand</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="brand"
-                        value={formData.brand}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>URL</Form.Label>
-                    <Form.Control
-                        type="url"
-                        name="url"
-                        value={formData.url}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Image URL</Form.Label>
-                    <Form.Control
-                        type="url"
-                        name="image_url"
-                        value={formData.image_url}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
-                <Button type="submit">Add Product</Button>
-            </Form>
+            <h1>CartConnect</h1>
+            <Button variant="primary" onClick={handleAddProduct}>Add Product</Button>
             <div>
                 <h2>Your Products</h2>
                 <div className="product-grid">
@@ -174,7 +143,7 @@ const HomePage = () => {
                                 <Card.Body>
                                     <Card.Title>{product.name}</Card.Title>
                                     <Card.Text>{product.brand}</Card.Text>
-                                    <Card.Text>{product.id}</Card.Text>
+                                    {/* <Card.Text>{product.id}</Card.Text> */}
                                     <button className="ellipsis-button" onClick={(e) => {
                                     e.preventDefault();
                                     handleEdit(product, e);
@@ -239,6 +208,58 @@ const HomePage = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            <Modal show={addProductModal} onHide={handleCloseAddProductModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Product</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleSubmit}>
+                    <Form.Group>
+                        <Form.Label>Product Name</Form.Label>
+                        <Form.Control
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Brand</Form.Label>
+                        <Form.Control
+                        type="text"
+                        name="brand"
+                        value={formData.brand}
+                        onChange={handleChange}
+                        required
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>URL</Form.Label>
+                        <Form.Control
+                        type="url"
+                        name="url"
+                        value={formData.url}
+                        onChange={handleChange}
+                        required
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Image URL</Form.Label>
+                        <Form.Control
+                        type="url"
+                        name="image_url"
+                        value={formData.image_url}
+                        onChange={handleChange}
+                        required
+                        />
+                    </Form.Group>
+                    <Button type="submit">Add Product</Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+
         </Container>
     );
 };

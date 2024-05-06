@@ -3,6 +3,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjusts the grid to fill available width */
     gap: 20px; /* Space between the cards */
+    grid-row-gap: 20px;
  }
  
  
