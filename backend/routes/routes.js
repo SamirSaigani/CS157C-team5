@@ -50,7 +50,7 @@ router.post('/api/products', async (req, res) => {
         const productId = Date.now();  // Simple unique ID generation
         const productKey = `user:${userId}:product:${productId}`;
         await redisClient.hSet(productKey, {
-            name, brand, url, image_url
+            name, brand, url, image_url, id: productId
         });
         await redisClient.rPush(`user:${userId}:products`, productKey);
 
@@ -72,6 +72,54 @@ router.get('/api/products/:userId', async (req, res) => {
     } catch (error) {
         console.error('Failed to retrieve products:', error);
         res.status(500).json({ error: 'Failed to retrieve products' });
+    }
+});
+
+// Update a product
+router.put('/api/products/:productId', async (req, res) => {
+    const { userId, name, brand, url, image_url } = req.body;
+    const { productId } = req.params;
+
+    const productKey = `user:${userId}:product:${productId}`;
+    try {
+        // Check if product exists
+        const exists = await redisClient.exists(productKey);
+        if (!exists) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Update product data in Redis
+        await redisClient.hSet(productKey, { name, brand, url, image_url });
+        res.status(200).json({ message: 'Product updated successfully' });
+    } catch (error) {
+        console.error('Failed to update product:', error);
+        res.status(500).json({ error: 'Failed to update product' });
+    }
+});
+
+// Delete a product
+router.delete('/api/products/:productId', async (req, res) => {
+    const userId = req.query.userId; // Retrieve userId from query parameters
+    const { productId } = req.params;
+
+    const productKey = `user:${userId}:product:${productId}`;
+    try {
+        // Check if product exists
+        const exists = await redisClient.exists(productKey);
+        if (!exists) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Remove the product from Redis
+        await redisClient.del(productKey);
+
+        // Also remove the product key from the list of products
+        await redisClient.lRem(`user:${userId}:products`, 0, productKey);
+
+        res.status(200).json({ message: 'Product deleted successfully' });
+    } catch (error) {
+        console.error('Failed to delete product:', error);
+        res.status(500).json({ error: 'Failed to delete product' });
     }
 });
 
