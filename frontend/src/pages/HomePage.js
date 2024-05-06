@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Modal, Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import '../styles/HomePage.css';
 
 const HomePage = () => {
@@ -15,12 +16,18 @@ const HomePage = () => {
         id: ''
     });
     const userId = sessionStorage.getItem('userEmail');; // This should come from user session or state
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/products/${userId}`)
+        if (!userId) { // If there is no user email in session storage
+            navigate('/', { replace: true }); // Redirect to landing page
+        }
+        else {
+            fetch(`http://localhost:8080/api/products/${userId}`)
             .then(res => res.json())
             .then(setProducts)
             .catch(console.error);
+        }
     }, [userId]);
 
     const handleChange = (event) => {
