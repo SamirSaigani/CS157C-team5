@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Modal, Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import '../styles/HomePage.css';
 
 const HomePage = () => {
@@ -14,14 +15,20 @@ const HomePage = () => {
         image_url: '',
         id: ''
     });
-    const userId = "DN@gmail.com"; // This should come from user session or state
+    const userId = sessionStorage.getItem('userEmail');; // This should come from user session or state
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/products/${userId}`)
+        if (!userId) { // If there is no user email in session storage
+            navigate('/', { replace: true }); // Redirect to landing page
+        }
+        else {
+            fetch(`http://localhost:8080/api/products/${userId}`)
             .then(res => res.json())
             .then(setProducts)
             .catch(console.error);
-    }, []);
+        }
+    }, [userId, navigate]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -74,7 +81,7 @@ const HomePage = () => {
         console.log('Save changes for', currentProduct);
       
         const { id, name, brand, url, image_url } = formData;
-        const userId = "DN@gmail.com"; // This should come from user session or state
+        //const userId = "DN@gmail.com"; // This should come from user session or state
       
         fetch(`http://localhost:8080/api/products/${id}`, {
           method: 'PUT',
@@ -101,7 +108,7 @@ const HomePage = () => {
     };
     
     const handleDelete = () => {
-        const userId = "DN@gmail.com"; // This should come from user session or state
+        //const userId = "DN@gmail.com"; // This should come from user session or state
       
         fetch(`http://localhost:8080/api/products/${currentProduct.id}?userId=${userId}`, {
           method: 'DELETE',
