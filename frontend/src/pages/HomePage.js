@@ -207,7 +207,7 @@ const HomePage = () => {
             </Modal>
             </Container>
         </Navbar>
-        <Container style={{ minHeight: "100vh", backgroundColor: "#ADD8E6" }}>
+        <Container>
             <h1> </h1>
             <Button variant="primary" onClick={handleAddProduct}>Add Product</Button>
             <div className="account-icon">
