@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Modal, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import '../styles/HomePage.css';
 
 const HomePage = () => {
     const [showModal, setShowModal] = useState(false);
     const [addProductModal, setAddProductModal] = useState(false);
+    const [showAccountModal, setShowAccountModal] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({});
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
@@ -54,6 +56,20 @@ const HomePage = () => {
             console.error('Error adding product:', error);
             alert('Failed to add product');
         });
+    };
+
+    /* Modal for Account Icon */
+    const handleAccountIconClick = () => {
+        setShowAccountModal(true);
+    };
+      
+      const handleAccountModalClose = () => {
+        setShowAccountModal(false);
+    };
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('userEmail'); // Remove the user email from session storage
+        navigate('/', { replace: true }); // Redirect to the landing page
     };
 
     /* Modal Handling for adding products */
@@ -140,6 +156,9 @@ const HomePage = () => {
         <Container>
             <h1>CartConnect</h1>
             <Button variant="primary" onClick={handleAddProduct}>Add Product</Button>
+            <div className="account-icon">
+                <AccountCircle style={{ fontSize: 30, position: 'absolute', top: 10, right: 10 }} onClick={handleAccountIconClick} />
+            </div>
             <div>
                 <h2>Your Products</h2>
                 <div className="product-grid">
@@ -265,6 +284,24 @@ const HomePage = () => {
                     <Button type="submit">Add Product</Button>
                     </Form>
                 </Modal.Body>
+            </Modal>
+
+            <Modal show={showAccountModal} onHide={handleAccountModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    <div className="account-circle-container">
+                    <AccountCircle style={{ fontSize: 40 }} />
+                    </div>
+                    <h5 className="mt-3">Temp Name</h5>
+                    <p>{userId}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleLogout}>
+                        Logout
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
         </Container>
