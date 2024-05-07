@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container, Modal, Card, Navbar } from 'react-bootstrap';
+import { Form, Button, Container, Modal, Card, Navbar, Nav } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import '../styles/HomePage.css';
@@ -18,7 +19,7 @@ const HomePage = () => {
         id: ''
     });
     const [userName, setUserName] = useState('');
-    const userId = sessionStorage.getItem('userEmail');; // This should come from user session or state
+    const userId = sessionStorage.getItem('userEmail'); // This should come from user session or state
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -184,7 +185,11 @@ const HomePage = () => {
         <>
         <Navbar style={{ backgroundColor: '#6c757d' }} variant="light">
             <Container>
-                <Navbar.Brand href="/">CartConnect</Navbar.Brand>
+                <Navbar.Brand href="/HomePage">CartConnect</Navbar.Brand>
+                <Nav className="me-auto">
+                        <Link to="/AboutUs" className="nav-link">About Us</Link>
+                </Nav>
+
                 <Modal show={showAccountModal} onHide={handleAccountModalClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Account</Modal.Title>
