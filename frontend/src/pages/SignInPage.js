@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Card } from 'react-bootstrap';
+import { Form, Button, Container, Card, Navbar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
@@ -37,13 +37,12 @@ const SignIn = () => {
             });
             if (response.ok) {
                 const data = await response.json();
-                console.log(data); // handle response
+                console.log(data);
                 alert('Signup successful!');
-                // Reset form or handle next steps here
                 setEmail('');
                 setPassword('');
                 setName('');
-                window.location.href = "/Login";
+                navigate("/Login");
             } else {
                 console.error('Failed to fetch:', response.statusText);
                 alert('Signup failed!');
@@ -55,30 +54,36 @@ const SignIn = () => {
     };
 
     return (
-        <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
-            <Card className="w-100" style={{ maxWidth: '400px' }}>
-                <Card.Body>
-                    <h1 className="text-center mb-4">CartConnect</h1>
-                    <h2 className="text-center mb-4">Sign Up</h2>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group id="name">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" name="name" value={name} onChange={handleChange} required />
-                        </Form.Group>
-                        <Form.Group id="email">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" name="email" value={email} onChange={handleChange} required />
-                        </Form.Group>
-                        <Form.Group id="password">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" name="password" value={password} onChange={handleChange} required />
-                        </Form.Group>
-                        <Button className="w-100 my-3" type="submit">Sign Up</Button>
-                        <Button className="w-100" variant="light" onClick={() => navigate("/Login")} style={{ color: 'black' }}>Log In</Button>
-                    </Form>
-                </Card.Body>
-            </Card>
-        </Container>
+        <>
+            <Navbar style={{ backgroundColor: '#6c757d' }} variant="light">
+                <Container>
+                    <Navbar.Brand href="/">CartConnect</Navbar.Brand>
+                </Container>
+            </Navbar>
+            <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh", backgroundColor: "#ADD8E6" }}>
+                <Card className="w-100" style={{ maxWidth: '400px' }}>
+                    <Card.Body>
+                        <h2 className="text-center mb-4">Sign Up</h2>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group id="name">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control type="text" name="name" value={name} onChange={handleChange} required />
+                            </Form.Group>
+                            <Form.Group id="email">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control type="email" name="email" value={email} onChange={handleChange} required />
+                            </Form.Group>
+                            <Form.Group id="password">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control type="password" name="password" value={password} onChange={handleChange} required />
+                            </Form.Group>
+                            <Button className="w-100 my-3" type="submit">Sign Up</Button>
+                            <Button className="w-100" variant="light" onClick={() => navigate("/Login")} style={{ color: 'black' }}>Log In</Button>
+                        </Form>
+                    </Card.Body>
+                </Card>
+            </Container>
+        </>
     );
 };
 

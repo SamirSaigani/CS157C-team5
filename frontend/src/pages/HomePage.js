@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container, Modal, Card } from 'react-bootstrap';
+import { Form, Button, Container, Modal, Card, Navbar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import '../styles/HomePage.css';
@@ -181,8 +181,34 @@ const HomePage = () => {
     };
 
     return (
-        <Container>
-            <h1>CartConnect</h1>
+        <>
+        <Navbar style={{ backgroundColor: '#6c757d' }} variant="light">
+            <Container>
+                <Navbar.Brand href="/">CartConnect</Navbar.Brand>
+                <Modal show={showAccountModal} onHide={handleAccountModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    <div className="account-circle-container">
+                    <AccountCircle style={{ fontSize: 40 }} />
+                    </div>
+                    <h5 className="mt-3">{userName}</h5>
+                    <p>{userId}</p>
+                </Modal.Body>
+                <Modal.Footer className="d-flex justify-content-between">
+                    <Button variant="danger" onClick={handleDeleteAccount}>
+                        Delete Account
+                    </Button>
+                    <Button variant="dark" onClick={handleLogout}>
+                        Logout
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            </Container>
+        </Navbar>
+        <Container style={{ minHeight: "100vh", backgroundColor: "#ADD8E6" }}>
+            <h1> </h1>
             <Button variant="primary" onClick={handleAddProduct}>Add Product</Button>
             <div className="account-icon">
                 <AccountCircle style={{ fontSize: 30, position: 'absolute', top: 10, right: 10 }} onClick={handleAccountIconClick} />
@@ -314,28 +340,9 @@ const HomePage = () => {
                 </Modal.Body>
             </Modal>
 
-            <Modal show={showAccountModal} onHide={handleAccountModalClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Account</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className="text-center">
-                    <div className="account-circle-container">
-                    <AccountCircle style={{ fontSize: 40 }} />
-                    </div>
-                    <h5 className="mt-3">{userName}</h5>
-                    <p>{userId}</p>
-                </Modal.Body>
-                <Modal.Footer className="d-flex justify-content-between">
-                    <Button variant="danger" onClick={handleDeleteAccount}>
-                        Delete Account
-                    </Button>
-                    <Button variant="dark" onClick={handleLogout}>
-                        Logout
-                    </Button>
-                </Modal.Footer>
-            </Modal>
 
         </Container>
+        </>
     );
 };
 

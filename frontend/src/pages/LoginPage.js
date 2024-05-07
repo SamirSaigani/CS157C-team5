@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Card } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';  // Import useHistory for redirection
+import { Form, Button, Container, Card, Navbar } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/login', {  // Changed endpoint to /login
+            const response = await fetch('http://localhost:8080/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,9 +28,9 @@ const Login = () => {
             });
             if (response.ok) {
                 const data = await response.json();
-                console.log(data); // handle response
+                console.log(data);
                 alert('Login successful!');
-                sessionStorage.setItem('userEmail', email); // **Store user email in session storage**
+                sessionStorage.setItem('userEmail', email);
                 navigate("/HomePage");
             } else {
                 console.error('Failed to fetch:', response.statusText);
@@ -43,25 +43,31 @@ const Login = () => {
     };
 
     return (
-        <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
-            <Card className="w-100" style={{ maxWidth: '400px' }}>
-                <Card.Body>
-                    <h1 className="text-center mb-4">CartConnect</h1>
-                    <h2 className="text-center mb-4">Login</h2>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group id="email">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" name="email" value={email} onChange={handleChange} required />
-                        </Form.Group>
-                        <Form.Group id="password">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" name="password" value={password} onChange={handleChange} required />
-                        </Form.Group>
-                        <Button className="w-100" type="submit">Login</Button>
-                    </Form>
-                </Card.Body>
-            </Card>
-        </Container>
+        <>
+            <Navbar style={{ backgroundColor: '#6c757d' }} variant="light">
+                <Container>
+                    <Navbar.Brand href="/">CartConnect</Navbar.Brand>
+                </Container>
+            </Navbar>
+            <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh", backgroundColor: "#ADD8E6" }}>
+                <Card className="w-100" style={{ maxWidth: '400px' }}>
+                    <Card.Body>
+                        <h2 className="text-center mb-4">Login</h2>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group id="email">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control type="email" name="email" value={email} onChange={handleChange} required />
+                            </Form.Group>
+                            <Form.Group id="password">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control type="password" name="password" value={password} onChange={handleChange} required />
+                            </Form.Group>
+                            <Button className="w-100" type="submit">Login</Button>
+                        </Form>
+                    </Card.Body>
+                </Card>
+            </Container>
+        </>
     );
 };
 
