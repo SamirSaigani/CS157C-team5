@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Modal, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import '../styles/HomePage.css';
 
 const HomePage = () => {
     const [showModal, setShowModal] = useState(false);
     const [addProductModal, setAddProductModal] = useState(false);
+    const [showAccountModal, setShowAccountModal] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({});
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ const HomePage = () => {
         image_url: '',
         id: ''
     });
+    const [userName, setUserName] = useState('');
     const userId = sessionStorage.getItem('userEmail');; // This should come from user session or state
     const navigate = useNavigate();
 
@@ -23,9 +26,16 @@ const HomePage = () => {
             navigate('/', { replace: true }); // Redirect to landing page
         }
         else {
+            // Get users products to fill homepage content
             fetch(`http://localhost:8080/api/products/${userId}`)
             .then(res => res.json())
             .then(setProducts)
+            .catch(console.error);
+
+            // Get users name
+            fetch(`http://localhost:8080/api/user/${userId}/name`)
+            .then(res => res.json())
+            .then(data => setUserName(data.name))
             .catch(console.error);
         }
     }, [userId, navigate]);
@@ -53,6 +63,44 @@ const HomePage = () => {
         .catch(error => {
             console.error('Error adding product:', error);
             alert('Failed to add product');
+        });
+    };
+
+    /* Modal for Account Icon */
+    const handleAccountIconClick = () => {
+        setShowAccountModal(true);
+    };
+      
+      const handleAccountModalClose = () => {
+        setShowAccountModal(false);
+    };
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('userEmail'); // Remove the user email from session storage
+        navigate('/', { replace: true }); // Redirect to the landing page
+    };
+
+    const handleDeleteAccount = () => {
+        fetch(`http://localhost:8080/api/account/${userId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Something went wrong');
+        })
+        .then(data => {
+          console.log('Account deleted successfully:', data);
+          // Add code to handle successful account deletion (e.g., redirect to login page)
+          navigate('/login', { replace: true });
+        })
+        .catch(error => {
+          console.error('Error deleting account:', error);
+          alert('Failed to delete account');
         });
     };
 
@@ -108,8 +156,6 @@ const HomePage = () => {
     };
     
     const handleDelete = () => {
-        //const userId = "DN@gmail.com"; // This should come from user session or state
-      
         fetch(`http://localhost:8080/api/products/${currentProduct.id}?userId=${userId}`, {
           method: 'DELETE',
           headers: {
@@ -140,6 +186,9 @@ const HomePage = () => {
         <Container>
             <h1>CartConnect</h1>
             <Button variant="primary" onClick={handleAddProduct}>Add Product</Button>
+            <div className="account-icon">
+                <AccountCircle style={{ fontSize: 30, position: 'absolute', top: 10, right: 10 }} onClick={handleAccountIconClick} />
+            </div>
             <div>
                 <h2>Your Products</h2>
                 <div className="product-grid">
@@ -265,6 +314,27 @@ const HomePage = () => {
                     <Button type="submit">Add Product</Button>
                     </Form>
                 </Modal.Body>
+            </Modal>
+
+            <Modal show={showAccountModal} onHide={handleAccountModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    <div className="account-circle-container">
+                    <AccountCircle style={{ fontSize: 40 }} />
+                    </div>
+                    <h5 className="mt-3">{userName}</h5>
+                    <p>{userId}</p>
+                </Modal.Body>
+                <Modal.Footer className="d-flex justify-content-between">
+                    <Button variant="danger" onClick={handleDeleteAccount}>
+                        Delete Account
+                    </Button>
+                    <Button variant="dark" onClick={handleLogout}>
+                        Logout
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
         </Container>

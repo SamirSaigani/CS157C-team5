@@ -123,4 +123,45 @@ router.delete('/api/products/:productId', async (req, res) => {
     }
 });
 
+// Get a user's name
+router.get('/api/user/:userId/name', async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const userData = await redisClient.hGetAll(`user:${userId}`);
+      if (!userData || Object.keys(userData).length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.status(200).json({ name: userData.name });
+    } catch (error) {
+      console.error('Failed to retrieve user name:', error);
+      res.status(500).json({ error: 'Failed to retrieve user name' });
+    }
+  });
+
+// Delete a user account
+router.delete('/api/account/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      // Check if user exists
+      const userData = await redisClient.hGetAll(`user:${userId}`);
+      if (!userData || Object.keys(userData).length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Remove the user data from Redis
+      await redisClient.del(`user:${userId}`);
+  
+      // Remove the product list key and all associated product keys
+      const productKeys = await redisClient.lRange(`user:${userId}:products`, 0, -1);
+      await Promise.all(productKeys.map(key => redisClient.del(key)));
+      await redisClient.del(`user:${userId}:products`);
+  
+      res.status(200).json({ message: 'Account deleted successfully' });
+    } catch (error) {
+      console.error('Failed to delete account:', error);
+      res.status(500).json({ error: 'Failed to delete account' });
+    }
+});
+
 module.exports = router;
