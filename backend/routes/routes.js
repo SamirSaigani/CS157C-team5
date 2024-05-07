@@ -89,7 +89,11 @@ router.put('/api/products/:productId', async (req, res) => {
         }
 
         // Update product data in Redis
-        await redisClient.hSet(productKey, { name, brand, url, image_url });
+        if (name) await redisClient.hSet(productKey, 'name', name);
+        if (brand) await redisClient.hSet(productKey, 'brand', brand);
+        if (url) await redisClient.hSet(productKey, 'url', url);
+        if (image_url) await redisClient.hSet(productKey, 'image_url', image_url);
+        
         res.status(200).json({ message: 'Product updated successfully' });
     } catch (error) {
         console.error('Failed to update product:', error);

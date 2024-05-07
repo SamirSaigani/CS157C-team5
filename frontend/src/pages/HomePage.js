@@ -126,9 +126,7 @@ const HomePage = () => {
     };
 
     const handleSaveChanges = () => {
-        console.log('Save changes for', currentProduct);
-      
-        const { id, name, brand, url, image_url } = formData;
+        const { id, name, brand, url, image_url } = currentProduct;
         //const userId = "DN@gmail.com"; // This should come from user session or state
       
         fetch(`http://localhost:8080/api/products/${id}`, {
