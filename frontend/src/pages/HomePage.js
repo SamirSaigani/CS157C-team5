@@ -17,6 +17,7 @@ const HomePage = () => {
         image_url: '',
         id: ''
     });
+    const [userName, setUserName] = useState('');
     const userId = sessionStorage.getItem('userEmail');; // This should come from user session or state
     const navigate = useNavigate();
 
@@ -25,9 +26,16 @@ const HomePage = () => {
             navigate('/', { replace: true }); // Redirect to landing page
         }
         else {
+            // Get users products to fill homepage content
             fetch(`http://localhost:8080/api/products/${userId}`)
             .then(res => res.json())
             .then(setProducts)
+            .catch(console.error);
+
+            // Get users name
+            fetch(`http://localhost:8080/api/user/${userId}/name`)
+            .then(res => res.json())
+            .then(data => setUserName(data.name))
             .catch(console.error);
         }
     }, [userId, navigate]);
@@ -316,7 +324,7 @@ const HomePage = () => {
                     <div className="account-circle-container">
                     <AccountCircle style={{ fontSize: 40 }} />
                     </div>
-                    <h5 className="mt-3">Temp Name</h5>
+                    <h5 className="mt-3">{userName}</h5>
                     <p>{userId}</p>
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-between">
