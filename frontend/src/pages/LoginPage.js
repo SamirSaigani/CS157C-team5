@@ -46,6 +46,7 @@ const Login = () => {
         <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
             <Card className="w-100" style={{ maxWidth: '400px' }}>
                 <Card.Body>
+                    <h1 className="text-center mb-4">CartConnect</h1>
                     <h2 className="text-center mb-4">Login</h2>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group id="email">
