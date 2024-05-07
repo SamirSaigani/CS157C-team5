@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "node": "^22.1.0",
+    "phosphor-react": "^1.4.1"
+  }
+}
